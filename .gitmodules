@@ -1,0 +1,3 @@
+[submodule "ArcFormats/ASTC/Astc"]
+	path = ArcFormats/ASTC/Astc
+	url = https://github.com/dewrfe53535/astc

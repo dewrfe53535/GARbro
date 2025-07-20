@@ -28,6 +28,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Windows.Media;
 using GameRes.Utility;
+using Astc;
 
 namespace GameRes.Formats.Cri
 {
@@ -65,8 +66,6 @@ namespace GameRes.Formats.Cri
                 if (!Binary.AsciiEqual (header, 0, "xtx\0"))
                     return null;
             }
-            if (header[4] > 2)
-                return null;
             int aligned_width  = BigEndian.ToInt32 (header, 8);
             int aligned_height = BigEndian.ToInt32 (header, 0xC);
             if (aligned_width <= 0 || aligned_height <= 0)
@@ -123,6 +122,8 @@ namespace GameRes.Formats.Cri
                 return ReadTex0();
             else if (1 == m_info.Format)
                 return ReadTex1();
+            else if (9 == m_info.Format)
+                return ReadTex9();
             else
                 return ReadTex2();
         }
@@ -196,6 +197,26 @@ namespace GameRes.Formats.Cri
             }
             var dxt = new DirectDraw.DxtDecoder (packed, m_info);
             return dxt.UnpackDXT5();
+        }
+
+        byte[] ReadTex9()
+        {
+            const int BlockLength = 16;
+            int blocksX = (m_info.AlignedWidth + 3) / 4; 
+            int blocksY = (m_info.AlignedHeight + 3) / 4; 
+            int compressedSize = blocksX * blocksY * BlockLength;
+            var compressedData = new byte[compressedSize];
+            m_input.Read(compressedData, 0, compressedData.Length);
+            var astcDecoder = new Astc.AstcDecoder();
+            byte[] decompressedPixels = astcDecoder.DecodeASTC(
+                compressedData,
+                (int)m_info.Width,
+                (int)m_info.Height,
+                4,
+                4 
+            );
+            Format = PixelFormats.Bgra32;
+            return decompressedPixels;
         }
 
         static int GetY (int i, int width, byte level)

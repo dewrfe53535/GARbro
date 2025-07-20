@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GameRes.Formats</RootNamespace>
     <AssemblyName>ArcFormats</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -1143,6 +1143,10 @@
     <ProjectReference Include="..\Net20\Net20.csproj">
       <Project>{73b6c693-9846-4d33-8300-a80239fcfff9}</Project>
       <Name>Net20</Name>
+    </ProjectReference>
+    <ProjectReference Include="ASTC\Astc\Astc\Astc.csproj">
+      <Project>{74f3546d-1901-4169-99bd-3b65d9a1e8f1}</Project>
+      <Name>Astc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
